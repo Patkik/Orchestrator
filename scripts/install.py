@@ -19,6 +19,7 @@ class InstallConfig:
     force: bool
     repo_url: str | None
     editable: bool
+    extract_agents: bool
 
 
 class InstallError(RuntimeError):
@@ -57,6 +58,11 @@ def parse_args(argv: list[str] | None = None) -> InstallConfig:
         action="store_true",
         help="Attempt optional editable pip install after installation",
     )
+    parser.add_argument(
+        "--extract-agents",
+        action="store_true",
+        help="Extract agent workflows (.github/instructions, agents, skills) to target workspace",
+    )
 
     args = parser.parse_args(argv)
     return InstallConfig(
@@ -67,6 +73,7 @@ def parse_args(argv: list[str] | None = None) -> InstallConfig:
         force=bool(args.force),
         repo_url=args.repo_url,
         editable=bool(args.editable),
+        extract_agents=bool(args.extract_agents),
     )
 
 
@@ -158,7 +165,32 @@ def attempt_editable_install(destination: Path) -> str | None:
         )
 
 
-def execute_install(config: InstallConfig, *, source_root: Path) -> tuple[Path, str | None]:
+def extract_agent_workflows(source_root: Path, target: Path, force: bool) -> list[str]:
+    """Extract agent workflow files (.github/instructions, agents, skills) to target workspace."""
+    agent_dirs = [".github/instructions", ".github/agents", ".github/skills"]
+    extracted = []
+    
+    for agent_dir in agent_dirs:
+        source_agent_path = source_root / agent_dir
+        target_agent_path = target / agent_dir
+        
+        if not source_agent_path.exists():
+            continue
+            
+        if target_agent_path.exists() and not force:
+            continue
+            
+        if target_agent_path.exists() and force:
+            shutil.rmtree(target_agent_path)
+            
+        target_agent_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(source_agent_path, target_agent_path)
+        extracted.append(agent_dir)
+    
+    return extracted
+
+
+def execute_install(config: InstallConfig, *, source_root: Path) -> tuple[Path, str | None, list[str]]:
     _ensure_target_exists(config.target)
     relative_path = _ensure_relative_destination(config.path)
     destination = config.target / relative_path
@@ -187,14 +219,20 @@ def execute_install(config: InstallConfig, *, source_root: Path) -> tuple[Path, 
         )
 
     warning = attempt_editable_install(destination) if config.editable else None
-    return destination, warning
+    
+    # Extract agent workflows if requested
+    extracted_agents = []
+    if config.extract_agents:
+        extracted_agents = extract_agent_workflows(source_root, config.target, config.force)
+    
+    return destination, warning, extracted_agents
 
 
 def main(argv: list[str] | None = None) -> int:
     try:
         config = parse_args(argv)
         source_root = Path(__file__).resolve().parents[1]
-        destination, warning = execute_install(config, source_root=source_root)
+        destination, warning, extracted_agents = execute_install(config, source_root=source_root)
     except InstallError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
@@ -211,6 +249,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"target={config.target}")
     print(f"installed_path={destination}")
     print("import_example=from orchestrator import StateDatabase")
+    
+    if extracted_agents:
+        print(f"extracted_agents={','.join(extracted_agents)}")
+    
     if warning:
         print(warning)
     return 0

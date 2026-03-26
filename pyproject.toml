@@ -3,11 +3,36 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "orchestrator"
+name = "anedestrator"
 version = "0.1.0"
-description = "Orchestrator SQLite state layer MVP"
+description = "Orchestrator SQLite state layer MVP - Multi-agent orchestration framework for agentic AI systems"
 requires-python = ">=3.10"
+authors = [
+    {name = "Patrick Josh Añedez", email = "contact@example.com"}
+]
+maintainers = [
+    {name = "Patrick Josh Añedez"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+keywords = ["orchestrator", "ai-agents", "multi-agent", "workflow", "framework"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/its-patri/Orchestrator"
+Documentation = "https://github.com/its-patri/Orchestrator#readme"
+Repository = "https://github.com/its-patri/Orchestrator.git"
+Issues = "https://github.com/its-patri/Orchestrator/issues"
 
 [project.optional-dependencies]
 dev = [

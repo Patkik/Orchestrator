@@ -128,6 +128,7 @@ def test_execute_install_submodule_resolves_repo_from_origin(
         force=False,
         repo_url=None,
         editable=False,
+        extract_agents=False,
     )
 
     captured: dict[str, str | None] = {"repo_url": None}
@@ -142,10 +143,13 @@ def test_execute_install_submodule_resolves_repo_from_origin(
     )
     monkeypatch.setattr(install_module, "install_submodule_mode", _fake_install_submodule_mode)
 
-    destination, warning = install_module.execute_install(config, source_root=source_root)
+    destination, warning, extracted_agents = install_module.execute_install(
+        config, source_root=source_root
+    )
 
     assert destination == target_root / "vendor" / "orchestrator"
     assert warning is None
+    assert extracted_agents == []
     assert captured["repo_url"] == "https://github.com/acme/orchestrator.git"
 
 
@@ -165,6 +169,7 @@ def test_execute_install_submodule_requires_repo_url_when_missing(
         force=False,
         repo_url=None,
         editable=False,
+        extract_agents=False,
     )
 
     monkeypatch.setattr(install_module, "resolve_repo_url_from_origin", lambda source_root: None)
@@ -203,6 +208,7 @@ def test_execute_install_copy_mode_with_editable_warning(tmp_path: Path, install
         force=False,
         repo_url="https://github.com/acme/orchestrator.git",
         editable=True,
+        extract_agents=False,
     )
 
     monkeypatch.setattr(
@@ -213,10 +219,13 @@ def test_execute_install_copy_mode_with_editable_warning(tmp_path: Path, install
         ),
     )
 
-    destination, warning = install_module.execute_install(config, source_root=source_root)
+    destination, warning, extracted_agents = install_module.execute_install(
+        config, source_root=source_root
+    )
 
     assert destination == target_root / "vendor" / "orchestrator"
     assert destination.exists()
     assert warning is not None
+    assert extracted_agents == []
 
     shutil.rmtree(destination)

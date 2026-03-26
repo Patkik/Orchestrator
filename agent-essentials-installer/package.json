@@ -1,0 +1,55 @@
+{
+  "name": "@anedezorchestrator/orchestrator-essentials-setup",
+  "version": "1.0.0",
+  "description": "CLI tool to set up agentic workflow environments in any workspace with a single command",
+  "main": "index.js",
+  "bin": {
+    "orchestrator-essentials-setup": "./index.js",
+    "orch-setup": "./index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .js",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "cli",
+    "orchestrator",
+    "ai-agents",
+    "workflow",
+    "setup",
+    "multi-agent"
+  ],
+  "author": {
+    "name": "Patrick Josh Añedez",
+    "url": "https://github.com/its-patri"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/its-patri/Orchestrator.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.11",
+    "ora": "^8.0.1",
+    "simple-git": "^3.22.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "preferGlobal": true,
+  "files": [
+    "index.js",
+    "cli",
+    "templates",
+    "LICENSE",
+    "README.md"
+  ]
+}
