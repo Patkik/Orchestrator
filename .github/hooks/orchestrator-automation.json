@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "SubagentStart": [
+      {
+        "type": "command",
+        "command": "python .github/hooks/scripts/orchestrator_policy.py",
+        "windows": "python .github\\hooks\\scripts\\orchestrator_policy.py",
+        "timeout": 15
+      }
+    ],
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": "python .github/hooks/scripts/pre_tool_policy.py",
+        "windows": "python .github\\hooks\\scripts\\pre_tool_policy.py",
+        "timeout": 15
+      }
+    ]
+  }
+}
