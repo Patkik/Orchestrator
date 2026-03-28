@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orchestrator-agentic-system"
+version = "0.1.0"
+description = "Orchestrator framework utilities and CLI tools"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[project.scripts]
+orchestrator = "orchestrator_scripts.production_extractor:main"
+orchestrator-extract = "orchestrator_scripts.production_extractor:main"
+orchestrator-context = "orchestrator_scripts.context_generator:main"
+orchestrator-state = "orchestrator_scripts.context_manager:main"
+
+[tool.setuptools]
+packages = ["orchestrator", "orchestrator.state", "orchestrator_scripts"]
+
+[tool.setuptools.package-dir]
+orchestrator_scripts = "scripts"
