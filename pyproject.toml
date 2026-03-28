@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Orchestrator SQLite state layer MVP - Multi-agent orchestration framework for agentic AI systems"
 requires-python = ">=3.10"
 authors = [
-    {name = "Patrick Josh Añedez", email = "contact@example.com"}
+    {name = "Patrick Josh Añedez", email = "distructatlas@gmail.com"}
 ]
 maintainers = [
     {name = "Patrick Josh Añedez"}
